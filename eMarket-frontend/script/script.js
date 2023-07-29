@@ -37,6 +37,10 @@ pages.page_signup = () => {
 
 pages.page_buyer_homepage = () => {
     const cardContainers = document.querySelectorAll(".card-container");
+    const cartIcon = document.getElementById('cart')
+    const cartModal = document.getElementById('cartmodal')
+    console.log(cartIcon)
+    console.log(cartModal)
   
     // Show description on hover
     cardContainers.forEach((cardContainer) => {
@@ -50,4 +54,15 @@ pages.page_buyer_homepage = () => {
         description.classList.add("hide");
       });
     });
+
+    // Show and hide cart modal
+    cartIcon.addEventListener("click", () => {
+        cartModal.classList.toggle("hide");
+    });
+
+    document.body.addEventListener("click", (e) => {
+        if (!cartModal.classList.contains("hide") && !cartIcon.contains(e.target) && !cartModal.contains(e.target)) {
+          cartModal.classList.add("hide");
+        }
+      });
   };

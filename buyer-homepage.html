@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="eMarket-frontend/styles/buyer-homepage.css" />
-
+    <script
+      src="https://kit.fontawesome.com/b875534107.js"
+      crossorigin="anonymous"
+    ></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -32,15 +35,62 @@
       </ul>
       <div class="nav-buttons">
         <a href="">Contact Us</a>
+        <!-- Add to Cart Modal -->
+        <div id="cartmodal" class="cart-modal hide">
+          <h2>Shopping Bag</h2>
+          <div class="cart-wrapper">
+            <div class="cart-item">
+              <img src="eMarket-frontend/src/images/orange.jpg" alt="" />
+              <div class="details">
+                <h3>Item Name</h3>
+                <p>Quantity x1</p>
+              </div>
+              <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="cart-item">
+              <img src="eMarket-frontend/src/images/orange.jpg" alt="" />
+              <div class="details">
+                <h3>Item Name</h3>
+                <p>Quantity x1</p>
+              </div>
+              <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="cart-item">
+              <img src="eMarket-frontend/src/images/orange.jpg" alt="" />
+              <div class="details">
+                <h3>Item Name</h3>
+                <p>Quantity x1</p>
+              </div>
+              <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="cart-item">
+              <img src="eMarket-frontend/src/images/orange.jpg" alt="" />
+              <div class="details">
+                <h3>Item Name</h3>
+                <p>Quantity x1</p>
+              </div>
+              <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="cart-item">
+              <img src="eMarket-frontend/src/images/orange.jpg" alt="" />
+              <div class="details">
+                <h3>Item Name</h3>
+                <p>Quantity x1</p>
+              </div>
+              <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+          </div>
+          <div class="total-qtty">Total quantity:</div>
+        </div>
+
         <img
+          id="cart"
           src="eMarket-frontend/src/images/add-to-cart-nav.png"
           alt="Add to Cart Image"
         />
         <button class="signout btn">Sign Out</button>
       </div>
     </header>
-
-    <!-- Add to Cart Modal -->
 
     <!-- Banner -->
     <div class="banner-container">

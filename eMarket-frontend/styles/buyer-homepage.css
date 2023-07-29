@@ -292,3 +292,50 @@ header img {
   display: flex;
   gap: 10%;
 }
+
+.cart-modal {
+  width: 25% !important;
+  position: absolute;
+  left: 55%;
+  top: 5%;
+  border: solid 1px var(--color-green);
+  padding: 10px 20px;
+  background-color: var(--color-whitesmoke);
+  border-radius: 10px;
+}
+
+.cart-modal h2 {
+  padding: 15px 10px;
+}
+
+.cart-wrapper {
+  overflow-x: scroll;
+  max-height: 300px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cart-item {
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-radius: 10px;
+  border: solid 1px black;
+  padding: 10px 5px;
+}
+
+.details {
+  margin-right: 20px;
+}
+
+.details p {
+  overflow-wrap: break-word;
+}
+
+.total-qtty {
+  text-align: right;
+  padding: 5%;
+}
