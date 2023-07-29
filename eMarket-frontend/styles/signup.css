@@ -1,0 +1,111 @@
+.signup-main {
+  background-color: whitesmoke;
+}
+
+.signup-main .inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.signup-box {
+  padding: 40px;
+}
+
+.signup-main .inputs input {
+  margin-top: 10px;
+}
+
+.signup-main .row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.signup-main .row label {
+  font-size: 0.9375rem;
+}
+
+.question-role .question div,
+.question-role .role > div:first-child {
+  font-size: 1rem;
+}
+
+.signup-main .question-role .role {
+  width: 50%;
+}
+
+.signup-main .question-role .role div:first-child {
+  margin-bottom: 10px;
+}
+
+select {
+  padding: 5px;
+  outline: none;
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+.select {
+  width: 100%;
+  height: 100%;
+}
+
+.signup-main .question input,
+.signup-main .row input {
+  padding: 15px 12px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  outline: none;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.signup-main .question input::placeholder,
+.signup-main .row input::placeholder {
+  font-size: 1.0625rem;
+}
+
+.signup-main .login-button {
+  color: #1a73e8;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.change-data {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  padding-left: 35%;
+}
+
+@media (max-width: 600px) {
+  .signup-box {
+    padding: 10px;
+  }
+
+  .row {
+    padding: 0;
+    gap: 10px;
+    width: 100% !important;
+    flex-direction: column;
+  }
+
+  .column {
+    width: 100%;
+  }
+
+  .column input {
+    width: 100%;
+  }
+}

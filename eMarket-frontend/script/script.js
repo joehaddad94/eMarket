@@ -1,6 +1,6 @@
 const pages = {}
 
-pages.base_url = "http://localhost/ClassroomClone/back-end/";
+pages.base_url = "";
 
 // Common Functions
 
@@ -24,4 +24,10 @@ pages.loadFor = (page) => {
     eval("pages.page_" + page + "();")
 }
 
-pages.page_index = () => {}
+pages.page_index = () => {
+    console.log("hello")
+}
+
+pages.page_signup = () => {
+    console.log("hello")
+}

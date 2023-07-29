@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="eMarket-frontend/styles/index.css" />
+    <link rel="stylesheet" href="eMarket-frontend/styles/signup.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <div class="signup-main">
+      <div class="signup-box">
+        <div class="top-signup-box">
+          <div class="signup-heading"><h1>Sign up</h1></div>
+        </div>
+        <div class="bottom-signup-box">
+          <div class="inputs">
+            <div class="row">
+              <div class="column">
+                <div>
+                  <label for="first-name">First Name</label>
+                </div>
+                <div>
+                  <input id="first_name" placeholder="First Name" type="text" />
+                </div>
+              </div>
+              <div class="column">
+                <div>
+                  <label for="last-name">Last Name</label>
+                </div>
+                <div>
+                  <input id="last_name" placeholder="Last Name" type="text" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="column">
+                <div>
+                  <label for="email">Email</label>
+                </div>
+                <div>
+                  <input
+                    id="email"
+                    placeholder="Enter your email"
+                    type="email"
+                  />
+                </div>
+              </div>
+              <div class="column">
+                <div>
+                  <label for="password">Password</label>
+                </div>
+                <div>
+                  <input
+                    id="password"
+                    placeholder="Enter your password"
+                    type="password"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row question-role">
+              <!-- <div class="question">
+                <div>What's your lucky number?</div>
+                <input id="answer" placeholder="0" type="number" />
+              </div> -->
+              <div class="role">
+                <div>Signup as :</div>
+                <div class="select">
+                  <select id="signup_select">
+                    <option value="student">Seller</option>
+                    <option value="teacher">Buyer</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="login-button"><a href="index.html">Login</a></div>
+            <div id="signup" class="signup-button">
+              <button>Sign up</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="bottom-signup"></div> -->
+    </div>
+
+    <script src="eMarket-frontend/script/axios.min.js"></script>
+    <script src="eMarket-frontend/script/script.js"></script>
+    <script>
+      pages.loadFor("signup");
+    </script>
+  </body>
+</html>
