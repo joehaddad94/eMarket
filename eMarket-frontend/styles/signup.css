@@ -76,7 +76,7 @@ select {
 }
 
 .signup-main .login-button {
-  color: #1a73e8;
+  color: rgb(40, 238, 167);
   font-size: 1rem;
   cursor: pointer;
 }
