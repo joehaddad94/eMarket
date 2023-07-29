@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="eMarket-frontend/styles/buyer-homepage.css" />
+    <link rel="stylesheet" href="eMarket-frontend/styles/seller-hompeage.css" />
     <script
       src="https://kit.fontawesome.com/b875534107.js"
       crossorigin="anonymous"
@@ -85,6 +86,7 @@
 
         <img
           id="cart"
+          class="hide"
           src="eMarket-frontend/src/images/add-to-cart-nav.png"
           alt="Add to Cart Image"
         />
@@ -108,11 +110,99 @@
       </div>
     </div>
 
+    <!--Add Item MODAL -->
+    <div class="hide">
+    <div class="add-item-modal">
+      <div class="modal-box">
+        <div class="modal-header">Add Item</div>
+        <form>
+          <div class="inputs">
+            <div>
+              <input
+                required
+                id="productname-input"
+                placeholder="Product name (required)"
+                type="text"
+              />
+            </div>
+            <div>
+              <input
+                required
+                id="description-input"
+                placeholder="Description (required)"
+                type="text"
+              />
+            </div>
+            <div class="upload-img">
+                <label for="upload-image">Upload an image: </label>
+                <input type="file" id="fileInput">
+            </div>
+            <div class="category-dropdown-list">
+                <label for="category">Choose a category:</label>
+                <select name="categories" id="categories">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </select>
+            </div>
+            
+          
+          <div class="buttons">
+            <div class="cancel-button">
+              <button>Cancel</button>
+            </div>
+            <div class="create-button">
+              <button>Create</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
+</div>
+
+<!--Add Category MODAL -->
+<div class="hide">
+    <div class="add-item-modal">
+      <div class="modal-box">
+        <div class="modal-header">Add Category</div>
+        <form>
+          <div class="inputs">
+            <div>
+              <input
+                required
+                id="categoryname-input"
+                placeholder="Category Name (required)"
+                type="text"
+              />
+            </div>
+          <div class="buttons">
+            <div class="cancel-button">
+              <button>Cancel</button>
+            </div>
+            <div class="create-button">
+              <button>Create</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
+</div>
+
+
     <!-- Product List -->
     <div class="main-container">
       <div class="main">
         <div class="main-left">
           <div class="categories-container">
+            <div class="add-buttons">
+              <button id="addCategory" class="add-category-btn">
+                Add Category
+              </button>
+              <button id="addItem" class="add-item-btn">Add Item</button>
+            </div>
             <h2>Categories</h2>
             <ul>
               <li>All</li>
@@ -133,15 +223,12 @@
               <p class="description hide">
                 asdfasdfasdflaskduaskjfhasldfhjasldkjhpxzovicpzkljsherpiolsdkjhlkvcjhsa;oij
               </p>
-              <div class="card-icons">
+              <div class="card-buttons">
                 <div>
-                  <img
-                    src="eMarket-frontend/src/images/add-to-cart.png"
-                    alt=""
-                  />
+                  <button id="edit" class="edit-btn">Edit</button>
                 </div>
                 <div>
-                  <img src="eMarket-frontend/src/images/heart.png" alt="" />
+                  <button id="delete" class="delete-btn">Delete</button>
                 </div>
               </div>
             </div>
@@ -255,7 +342,7 @@
     <script src="eMarket-frontend/script/axios.min.js"></script>
     <script src="eMarket-frontend/script/script.js"></script>
     <script>
-      pages.loadFor("buyer_homepage");
+      pages.loadFor("seller_homepage");
     </script>
   </body>
 </html>

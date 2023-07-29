@@ -28,19 +28,17 @@ pages.loadFor = (page) => {
 
 pages.page_index = () => {
     console.log("hello")
-}
+};
 
 pages.page_signup = () => {
     console.log("hello")
-}
+};
 
 
 pages.page_buyer_homepage = () => {
     const cardContainers = document.querySelectorAll(".card-container");
     const cartIcon = document.getElementById('cart')
     const cartModal = document.getElementById('cartmodal')
-    console.log(cartIcon)
-    console.log(cartModal)
   
     // Show description on hover
     cardContainers.forEach((cardContainer) => {
@@ -65,4 +63,24 @@ pages.page_buyer_homepage = () => {
           cartModal.classList.add("hide");
         }
       });
+  };
+
+  
+pages.page_seller_homepage = () => {
+
+    const cardContainers = document.querySelectorAll(".card-container");
+
+    // Show description on hover
+    cardContainers.forEach((cardContainer) => {
+      const description = cardContainer.querySelector(".description");
+
+      cardContainer.addEventListener("mouseenter", () => {
+        description.classList.remove("hide");
+      });
+  
+      cardContainer.addEventListener("mouseleave", () => {
+        description.classList.add("hide");
+      });
+    });
+
   };
