@@ -32,6 +32,14 @@ img {
   max-width: 100%;
 }
 
+.display-none {
+  display: none;
+}
+
+.display-block {
+  display: block;
+}
+
 :root {
   --color-green: #28eea7;
   --color-yellow: #f0fcad;
@@ -42,7 +50,7 @@ img {
   --max-content-width: 1400px;
 }
 
-h2 {
+header h2 {
   color: var(--color-green);
 }
 
@@ -157,4 +165,121 @@ header img {
   background-color: var(--color-green);
   display: inline-block;
   border-radius: 10px;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  margin-top: 2%;
+  width: 90%;
+  height: auto;
+  display: flex;
+  gap: 5%;
+}
+
+.main-left {
+  width: 25%;
+  background-color: var(--color-green);
+  border: 1px solid #000000;
+  border-radius: 10px;
+}
+
+.main-right {
+  width: 73%;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5%;
+  padding: 2%;
+}
+
+.categories-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.categories-container h2 {
+  margin: 5% 0;
+}
+
+.main-container li {
+  margin: 5% 0;
+  text-decoration: none;
+  list-style: none;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15%;
+  border-radius: 10px;
+  border: 1px solid #000000;
+  margin-bottom: 3.5%;
+}
+
+.card {
+  width: 250px;
+  height: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  padding: 20px;
+  transition: all 0.3s ease-in;
+}
+
+.card .car-img {
+  height: 150px;
+  width: 150px;
+  background-position: center center;
+  background-size: cover;
+}
+
+.card .card-title {
+  padding: 20px 10px;
+  text-transform: uppercase;
+  text-shadow: 1px 0px 2px #000000;
+}
+
+.card > * {
+  padding: 10px;
+}
+
+.card-container:hover {
+  background-color: var(--color-green);
+}
+
+.footer-container {
+  width: 100%;
+  height: 200px;
+  background-color: var(--color-green);
+  margin-top: 2%;
+}
+
+.card p {
+  width: 200px;
+  word-wrap: break-word;
+}
+
+.card-icons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card-icons div:nth-child(1) {
+  padding: 0 10%;
+}
+
+.card-icons img {
+  height: 30px;
+  width: 30px;
 }

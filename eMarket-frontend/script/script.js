@@ -31,3 +31,21 @@ pages.page_index = () => {
 pages.page_signup = () => {
     console.log("hello")
 }
+
+pages.page_buyer_homepage = () => {
+    const card = document.getElementById('card')
+    console.log(card)
+    const description =document.getElementById('description')
+    console.log(description)
+
+    //Show description on hover
+    card.addEventListener('mouseover',() => {
+        console.log('mouseover')
+        description.classList.remove("display-none");
+        console
+    })
+
+    card.addEventListener('mouseout',() => {
+        description.classList.add("display-none");
+    })
+}
