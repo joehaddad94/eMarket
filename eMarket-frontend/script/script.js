@@ -24,6 +24,8 @@ pages.loadFor = (page) => {
     eval("pages.page_" + page + "();")
 }
 
+// HTML Pages
+
 pages.page_index = () => {
     console.log("hello")
 }
@@ -32,20 +34,20 @@ pages.page_signup = () => {
     console.log("hello")
 }
 
+
 pages.page_buyer_homepage = () => {
-    const card = document.getElementById('card')
-    console.log(card)
-    const description =document.getElementById('description')
-    console.log(description)
+    const cardContainers = document.querySelectorAll(".card-container");
+  
+    // Show description on hover
+    cardContainers.forEach((cardContainer) => {
+      const description = cardContainer.querySelector(".description");
 
-    //Show description on hover
-    card.addEventListener('mouseover',() => {
-        console.log('mouseover')
-        description.classList.remove("display-none");
-        console
-    })
-
-    card.addEventListener('mouseout',() => {
-        description.classList.add("display-none");
-    })
-}
+      cardContainer.addEventListener("mouseenter", () => {
+        description.classList.remove("hide");
+      });
+  
+      cardContainer.addEventListener("mouseleave", () => {
+        description.classList.add("hide");
+      });
+    });
+  };
