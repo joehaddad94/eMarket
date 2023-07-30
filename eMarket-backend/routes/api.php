@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\ProductsController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
@@ -15,4 +16,10 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::post('/add_update_category', [CategoriesController::class, "addOrUpdateCategory"]);
-Route::post('/delete_category/{id}', [CategoriesController::class, "deleteCategory"]);
+Route::get('/delete_category/{id}', [CategoriesController::class, "deleteCategory"]);
+Route::post('/fetch_one_or_all_categories/{id?}', [CategoriesController::class, "fetchAllOrOneCategory"]);
+
+
+Route::post('/add_update_product/{id?}', [ProductsController::class, "createOrUpdateProduct"]);
+Route::get('/delete_product/{id?}', [ProductsController::class, "deleteProduct"]);
+Route::post('/fetch_one_or_all_products/{id?}', [ProductsController::class, "fetchAllOrOneProduct"]);

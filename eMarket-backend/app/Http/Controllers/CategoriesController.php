@@ -25,6 +25,15 @@ class CategoriesController extends Controller
     $category->delete();
 
     return response()->json(['message' => 'Category deleted successfully']);
-    
    }
+
+   function fetchAllOrOneCategory($id = null) {
+    if($id){
+        $categories = Category::find($id);
+    }else{
+        $categories = Category::all();
+    }
+    
+    return json_encode(["Categories" => $categories]);
+}
 }
