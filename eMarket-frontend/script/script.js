@@ -105,9 +105,19 @@ pages.page_signup = () => {
 
 
 pages.page_buyer_homepage = () => {
-    const cardContainers = document.querySelectorAll(".card-container");
+    const cardContainers = document.querySelectorAll(".card-container")
     const cartIcon = document.getElementById('cart')
     const cartModal = document.getElementById('cartmodal')
+    const signOutBtn = document.getElementById('signOut')
+    
+
+    // Sign Out
+    signOutBtn.addEventListener('click', ()=>{
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("userAuth");
+      window.location.href = "index.html";
+    })
+    
   
     // Show description on hover
     cardContainers.forEach((cardContainer) => {
@@ -132,6 +142,7 @@ pages.page_buyer_homepage = () => {
           cartModal.classList.add("hide");
         }
       });
+
   };
 
   
@@ -141,13 +152,72 @@ pages.page_seller_homepage = () => {
     const addCategoryBtn = document.getElementById("addCategory");
     const categoryModal = document.getElementById("category-modal")
     const cancelCategoryModal = document.getElementById("cancel-category")
-    console.log(categoryModal)
+    const addCategoryInput = document.getElementById('categoryname-input')
+    const createCategoryBtn = document.getElementById('create-category')
+    const signOutBtn = document.getElementById('signOut')
+    const categoriesList = document.getElementById('categoriesList')
+    
+    function handleCategoryClick(category_id) {
+      console.log('Category ID clicked:', category_id);
+    }
+    
+    document.addEventListener('DOMContentLoaded', async () =>{
+      // Load Categories
+      let data={}
+      let response = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', data);
+      console.log(response.data.Categories);
+      
+    response.data.Categories.forEach((item) => {
+      const liElement = document.createElement('li');
+      liElement.textContent = item.name;
+  
+      liElement.setAttribute('data-category-id', item.id);
+  
+      categoriesList.appendChild(liElement);
+    });
+  
+    categoriesList.addEventListener('click', (event) => {
+      const clickedElement = event.target;
+  
+      if (clickedElement.tagName === 'LI') {
+        
+        const categoryId = clickedElement.getAttribute('data-category-id');
+        console.log('Category ID clicked:', categoryId);
+  
+        handleCategoryClick(categoryId);
+      }
+    });
+  })
+   
+
+    // Sign Out
+    signOutBtn.addEventListener('click', ()=>{
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("userAuth");
+      window.location.href = "index.html";
+    })
 
     // Show add category modal
     addCategoryBtn.addEventListener("click", () => { 
       categoryModal.classList.remove("hide");
     });
+    
+    // Create Category
+    createCategoryBtn.addEventListener('click', async (event) =>{
+      event.preventDefault();
+      
+      categoryName = addCategoryInput.value
 
+      let data = {
+        name: categoryName
+      }
+      
+      let response = await pages.postAPI('http://127.0.0.1:8000/api/add_update_category', data);
+      console.log(response)
+      categoryModal.classList.add("hide");
+      location.reload()
+    })
+  
      // Hide add category modal
      cancelCategoryModal.addEventListener("click", () => { 
       categoryModal.classList.add("hide");
@@ -166,6 +236,6 @@ pages.page_seller_homepage = () => {
       });
     });
 
-    
+     
 
   };

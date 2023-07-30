@@ -94,6 +94,10 @@
   text-decoration: none;
 }
 
+.categories-list li {
+  cursor: pointer;
+}
+
 /* Add Item Modal */
 
 .add-item-modal {
