@@ -1,7 +1,5 @@
 const pages = {}
 
-pages.base_url = "";
-
 // Common Functions
 
 pages.getAPI = async(url) => {
