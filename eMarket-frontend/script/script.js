@@ -140,24 +140,75 @@ pages.page_buyer_homepage = () => {
       liElement.textContent = item.name;
   
       liElement.setAttribute('data-category-id', item.id);
-      console.log(item.id)
+      // console.log(item.id)
   
       categoriesList.appendChild(liElement);
     });
-  
+    // Get ID on click
     categoriesList.addEventListener('click', (event) => {
       const clickedElement = event.target;
   
       if (clickedElement.tagName === 'LI') {
         
         const categoryId = clickedElement.getAttribute('data-category-id');
-        console.log('Category ID clicked:', categoryId);
+        // console.log('Category ID clicked:', categoryId);
   
         handleCategoryClick(categoryId);
       }
     });
-  })
 
+    let dataProducts = {}
+      let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
+      console.log(responseDisplayProduct)
+
+  const products = responseDisplayProduct.data.Products;
+
+  const productsContainer = document.getElementById('productsContainer');
+
+  products.forEach((product) => {
+    const productCard = document.createElement('div');
+    productCard.className = 'card-container';
+    productCard.dataset.productId = product.id;
+    productCard.innerHTML = `
+    <div class="card">
+      <div class="card-image">
+        <img src="${product.image}" alt="${product.name}" />
+      </div>
+      <div class="card-title">${product.name}</div>
+      <p class="description hide">${product.description}</p>
+      <div class="card-icons">
+                <div>
+                  <img
+                    src="eMarket-frontend/src/images/add-to-cart.png"
+                    alt=""
+                  />
+                </div>
+                <div>
+                  <img src="eMarket-frontend/src/images/heart.png" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+  `;
+
+    productsContainer.appendChild(productCard);
+  });
+
+    // Show description on hover
+    productsContainer.querySelectorAll(".card-container").forEach((cardContainer) => {
+      const description = cardContainer.querySelector(".description");
+      
+      cardContainer.addEventListener("mouseenter", () => {
+        description.classList.remove("hide");
+      });
+    
+      cardContainer.addEventListener("mouseleave", () => {
+        description.classList.add("hide");
+      });
+    });
+  });
+
+  
     // Sign Out
     signOutBtn.addEventListener('click', async ()=>{
       let data = {};
