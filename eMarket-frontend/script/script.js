@@ -188,22 +188,22 @@ pages.page_buyer_homepage = () => {
         productCard.className = 'card-container';
         productCard.dataset.productId = product.id;
         productCard.innerHTML = `
-          <div class="card">
-            <div class="card-image">
-              <img src="${product.image}" alt="${product.name}" />
+        <div class="card">
+          <div class="card-image">
+            <img src="${product.image}" alt="${product.name}" />
+          </div>
+          <div class="card-title">${product.name}</div>
+          <p class="description hide">${product.description}</p>
+          <div class="card-icons">
+            <div>
+              <img src="eMarket-frontend/src/images/add-to-cart.png" alt="" />
             </div>
-            <div class="card-title">${product.name}</div>
-            <p class="description hide">${product.description}</p>
-            <div class="card-buttons">
-              <div>
-                <button id="edit" class="edit-btn">Edit</button>
-              </div>
-              <div>
-                <button id="delete" class="delete-btn">Delete</button>
-              </div>
+            <div>
+              <img src="eMarket-frontend/src/images/heart.png" alt="" />
             </div>
           </div>
-        `;
+        </div>
+      `;
     
         productsContainer.appendChild(productCard);
       });
@@ -258,6 +258,7 @@ pages.page_buyer_homepage = () => {
         console.log('Category ID clicked:', categoryId);
   
         handleCategoryClick(categoryId);
+        productsContainer.innerHTML = ""
         displayProductsByCategory(categoryId)
       }
       
@@ -399,6 +400,7 @@ pages.page_seller_homepage = () => {
         `;
     
         productsContainer.appendChild(productCard);
+        return productCard
       });
     }
 
@@ -430,10 +432,89 @@ pages.page_seller_homepage = () => {
     document.addEventListener('DOMContentLoaded', async () =>{
       
       // Load Products
-      displayProducts();
+      let dataProducts = {};
+      let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
+      // console.log(responseDisplayProduct);
+    
+      const products = responseDisplayProduct.data.Products;
+    
+      const productsContainer = document.getElementById('productsContainer');
+    
+      products.forEach((product) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'card-container';
+        productCard.dataset.productId = product.id;
+        productCard.innerHTML = `
+          <div class="card">
+            <div class="card-image">
+              <img src="${product.image}" alt="${product.name}" />
+            </div>
+            <div class="card-title">${product.name}</div>
+            <p class="description hide">${product.description}</p>
+            <div class="card-buttons">
+              <div>
+                <button id="edit" class="edit-btn">Edit</button>
+              </div>
+              <div>
+                <button id="delete" class="delete-btn">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+    
+        productsContainer.appendChild(productCard);
+      
+        const editButton = productCard.querySelector('.edit-btn');
+      const deleteButton = productCard.querySelector('.delete-btn');
+
+    // Edit Product
+    editButton.addEventListener('click', () => {
+      const productId = productCard.dataset.productId;
+      // console.log('Edit button clicked for product ID:', productId);
+    });
+
+    // Delete Product
+    deleteButton.addEventListener('click', async () => {
+      const productId = productCard.dataset.productId;
+      console.log('Delete button clicked for product ID:', productId);
+      let data = {}
+      let responseDeleteProduct = await axios.post(`http://127.0.0.1:8000/api/delete_product/${productId}`, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+        },
+      });
+      console.log(responseDeleteProduct)
+      if(responseDeleteProduct.data.message== "Success"){
+        productsContainer.innerHTML = ""
+        displayProducts()
+      } else {
+        console.log(responseDeleteProduct.data.message)
+      }
+
+    });
+      
+      
+      });
+    
 
       // Load Categories
-      loadCategories();
+      let dataCategories = {};
+      let responseCategories = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategories);
+      
+      responseCategories.data.Categories.forEach((item) => {
+        const liElement = document.createElement('li');
+        liElement.textContent = item.name;
+        liElement.setAttribute('data-category-id', item.id);
+        categoriesList.appendChild(liElement);
+      });
+    
+
+    function handleCategoryClick(category_id) {
+      console.log('Category ID clicked:', category_id);
+      return category_id
+
+    }
+
   
     categoriesSelect.addEventListener('change', (event) => {
       selectedCategoryId = event.target.value;
@@ -441,8 +522,11 @@ pages.page_seller_homepage = () => {
       
   
       handleCategoryClick(selectedCategoryId);
+
+      
     });
 
+    
 
     categoriesList.addEventListener('click', (event) => {
       const clickedElement = event.target;
@@ -487,31 +571,7 @@ pages.page_seller_homepage = () => {
       });
     });
 
-      const editButton = productCard.querySelector('.edit-btn');
-      const deleteButton = productCard.querySelector('.delete-btn');
-
-    // Edit Product
-    editButton.addEventListener('click', () => {
-      const productId = productCard.dataset.productId;
-      // console.log('Edit button clicked for product ID:', productId);
-    });
-
-    // Delete Product
-    deleteButton.addEventListener('click', async () => {
-      const productId = productCard.dataset.productId;
-      console.log('Delete button clicked for product ID:', productId);
-      let data = {}
-      let responseDeleteProduct = await axios.post(`http://127.0.0.1:8000/api/delete_product/${productId}`, data, {
-        headers: {
-          'Authorization': `Bearer ${token}`, 
-        },
-      });
-      console.log(responseDeleteProduct)
-      if(responseDeleteProduct.data.message== "Product deleted successfully"){
-
-      }
-
-    });
+      
   });
   
     // Open Add product Modal
