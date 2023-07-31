@@ -348,3 +348,11 @@ header img {
 .categories-list li {
   cursor: pointer;
 }
+
+.add-to-cart-icon {
+  cursor: pointer;
+}
+
+.heart {
+  cursor: pointer;
+}
