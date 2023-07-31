@@ -349,14 +349,6 @@ header img {
   cursor: pointer;
 }
 
-.add-to-cart-icon {
-  cursor: pointer;
-}
-
-.heart {
-  cursor: pointer;
-}
-
-.cancel {
+.add-to-cart-icon .heart .cancel .add-to-cart {
   cursor: pointer;
 }

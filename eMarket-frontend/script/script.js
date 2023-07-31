@@ -216,6 +216,43 @@ pages.page_buyer_homepage = () => {
       });
     }
 
+    async function displayFavouritesBySession(session_id) {
+      // Load Products by Category
+
+      let dataProducts = {};
+      let responseDisplayProduct = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_favourites_by_session/${session_id}`, dataProducts);
+      // console.log(responseDisplayProduct);
+    
+      const products = responseDisplayProduct.data.Products;
+    
+      const productsContainer = document.getElementById('productsContainer');
+    
+      products.forEach((product) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'card-container';
+        productCard.dataset.productId = product.id;
+        productCard.innerHTML = `
+        <div class="card">
+          <div class="card-image">
+            <img src="${product.image}" alt="${product.name}" />
+          </div>
+          <div class="card-title">${product.name}</div>
+          <p class="description hide">${product.description}</p>
+          <div class="card-icons">
+            <div>
+              <img src="eMarket-frontend/src/images/add-to-cart.png" alt="" />
+            </div>
+            <div>
+              <img src="eMarket-frontend/src/images/heart.png" alt="" />
+            </div>
+          </div>
+        </div>
+      `;
+    
+        productsContainer.appendChild(productCard);
+      });
+    }
+
     async function displayCartItems (session_id) {
       let dataCart = {};
       let responseCart = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_cart_items_by_session/${session_id}`, dataCart);
@@ -330,7 +367,7 @@ console.log('Add to cart clicked for product ID:', cartItemId);
                 <img class="add-to-cart-icon" src="eMarket-frontend/src/images/add-to-cart.png" alt="" />
               </div>
               <div>
-                <img class="heart" src="eMarket-frontend/src/images/heart.png" alt="" />
+                <img id="hearts" class="heart" src="eMarket-frontend/src/images/heart.png" alt="" />
               </div>
             </div>
           </div>
@@ -352,8 +389,9 @@ console.log('Add to cart clicked for product ID:', cartItemId);
         let response = await pages.postAPI('http://127.0.0.1:8000/api/add_to_cart', data);
         cartWrapper.innerHTML = ""
         displayCartItems(session_id)
-         
-    })
+        })
+
+        
       });
 
       // Show description on hover
@@ -429,6 +467,32 @@ console.log('Add to cart clicked for product ID:', cartItemId);
           cartModal.classList.add("hide");
         }
       });
+
+      const allProducts = document.getElementById("all")
+      const favourites = document.getElementById("Favourites")
+      const heart = document.getElementById('hearts')
+      console.log(hearts)
+
+
+      allProducts.addEventListener('click', () => {
+        productsContainer.innerHTML = ""
+        displayProducts()
+      })
+
+      favourites.addEventListener('click', async () => {
+        displayFavouritesBySession(session_id)
+        console.log(response)
+      })
+      
+      heart.addEventListener('click', async () => {
+        console.log('clicked')
+        // let data = {
+        //   session_id: session_id,
+        //   product_id: productId
+        // }
+        // const response = await postAPI('http://127.0.0.1:8000/api/add_to_favourites', data);
+        // console.log(response)
+      })
 
   };
 
@@ -802,4 +866,10 @@ pages.page_seller_homepage = () => {
       categoryModal.classList.add("hide");
     });
 
+    const allProducts = document.getElementById("all")
+
+    allProducts.addEventListener('click', () => {
+      productsContainer.innerHTML = ""
+      displayProducts()
+    })
   };

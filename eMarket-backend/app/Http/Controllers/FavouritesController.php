@@ -27,7 +27,10 @@ class FavouritesController extends Controller
     }
 
     function fetchAllFavourites($session_id) {
-        $favourites = Favourite::where('session_id', $session_id)->get();
+        $favourites = Favourite::where('session_id', $session_id)
+        ->join('products', 'favourites.product_id', '=', 'products.id')
+        ->select('favourites.*', 'products.name', 'products.image', 'products.description')
+        ->get();
 
         return response()->json(['Favourites' => $favourites]);
     }
