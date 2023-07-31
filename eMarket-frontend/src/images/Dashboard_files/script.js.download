@@ -2,10 +2,6 @@ const pages = {}
 
 // Common Functions
 
-pages.print_message = (message) => {
-  console.log(message);
-}
-
 pages.getAPI = async(url) => {
     try {
         return await axios(url)
@@ -163,27 +159,19 @@ pages.page_seller_homepage = () => {
     const addItemBtn = document.getElementById('addItem')
     const addItemModal = document.getElementById('addItemModal')
     const cancelItemModal = document.getElementById('cancelBtn')
-    const categoriesSelect = document.getElementById('categories')
-    const productNameInput = document.getElementById('productname-input')
-    const descriptionInput = document.getElementById('description-input')
-    const imgInput = document.getElementById('fileInput')
-    const createItemBtn = document.getElementById('createItemBtn')
-    let selectedCategoryId
-    
 
     
     function handleCategoryClick(category_id) {
       console.log('Category ID clicked:', category_id);
-      return category_id
 
     }
     
     document.addEventListener('DOMContentLoaded', async () =>{
       // Load Categories
-      let dataCategories={}
-      let responseCategories = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategories);
+      let data={}
+      let response = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', data);
       
-      responseCategories.data.Categories.forEach((item) => {
+    response.data.Categories.forEach((item) => {
       const liElement = document.createElement('li');
       liElement.textContent = item.name;
   
@@ -192,15 +180,6 @@ pages.page_seller_homepage = () => {
       categoriesList.appendChild(liElement);
     });
   
-    categoriesSelect.addEventListener('change', (event) => {
-      selectedCategoryId = event.target.value;
-      console.log('Category ID selected:', selectedCategoryId);
-      
-  
-      handleCategoryClick(selectedCategoryId);
-    });
-
-
     categoriesList.addEventListener('click', (event) => {
       const clickedElement = event.target;
   
@@ -212,132 +191,15 @@ pages.page_seller_homepage = () => {
         handleCategoryClick(categoryId);
       }
     });
-
-    //load categories in categories modal
-      let dataCategoriesModal={}
-      let responseCategoriesModal = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategoriesModal);
-      console.log(responseCategoriesModal)
-
-      responseCategoriesModal.data.Categories.forEach((item) => {
-        const optionElement = document.createElement('option');
-        optionElement.textContent = item.name;
-        optionElement.value = item.id;
-    
-        categoriesSelect.appendChild(optionElement);
-      });
-
-      // Load Products
-      let dataProducts = {}
-      let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
-      console.log(responseDisplayProduct)
-
-      // Assuming the products are returned in the response's data.Products array
-  const products = responseDisplayProduct.data.Products;
-
-  // Get the container where the products will be displayed
-  const productsContainer = document.getElementById('productsContainer');
-
-  // Loop through the products and create HTML elements for each product
-  products.forEach((product) => {
-    const productCard = document.createElement('div');
-    productCard.className = 'card-container';
-    productCard.dataset.productId = product.id;
-    productCard.innerHTML = `
-      <div class="card">
-        <div class="card-image">
-          <img src="${product.image}" alt="${product.name}" />
-        </div>
-        <div class="card-title">${product.name}</div>
-        <p class="description hide">${product.description}</p>
-        <div class="card-buttons">
-          <div>
-            <button id="edit" class="edit-btn">Edit</button>
-          </div>
-          <div>
-            <button id="delete" class="delete-btn">Delete</button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    productsContainer.appendChild(productCard);
-
-      const editButton = productCard.querySelector('.edit-btn');
-      const deleteButton = productCard.querySelector('.delete-btn');
-
-    // Edit Product
-    editButton.addEventListener('click', () => {
-      const productId = productCard.dataset.productId;
-      console.log('Edit button clicked for product ID:', productId);
-      // Handle edit action here using the productId
-    });
-
-    // Delete Product
-    deleteButton.addEventListener('click', async () => {
-      const productId = productCard.dataset.productId;
-      console.log('Delete button clicked for product ID:', productId);
-      
-      let responseDeleteProduct = await pages.getAPI('http://127.0.0.1:8000/api/delete_product/${productId}');
-      console.log(responseDeleteProduct)
-    });
-  });
-  });
-
-
+  })
    
-    // Open Add product Modal
+    // Add Item
     addItemBtn.addEventListener('click', async () => {
+      console.log('Btn clicked')
       addItemModal.classList.remove("hide");
     })
 
-    // add a product
-    createItemBtn.addEventListener('click', async (event) => {
-      event.preventDefault()
-
-      categoriesSelect.addEventListener('change', (event) => {
-        const selectedCategoryId = event.target.value;
-        
-    
-        handleCategoryClick(selectedCategoryId);
-      });
-      if (imgInput.files.length === 0) {
-        return;
-      }
-    
-      const file = imgInput.files[0];
-      const reader = new FileReader();
-    
-      reader.onloadend = async () => {
-        const category_id = selectedCategoryId;
-        const productName = productNameInput.value;
-        const description = descriptionInput.value;
-        const base64Image = reader.result.split(',')[1];
-        
-    
-        let dataProduct = {
-          category_id: category_id,
-          name: productName,
-          description: description,
-          image: base64Image
-        };
-    //     const dataProduct = new FormData();
-
-    // // Append the properties to the FormData object
-    // dataProduct.append('category_id', category_id);
-    // dataProduct.append('name', productName);
-    // dataProduct.append('description', description);
-    // dataProduct.append('image', base64Image);
-    console.log(dataProduct)
-          
-        let responseAddProduct = await pages.postAPI('http://127.0.0.1:8000/api/add_update_product', dataProduct);
-          console.log(responseAddProduct);
-       
-      };
-    
-      reader.readAsDataURL(file);
-    })
-
-    // Cancel Btn in product Modal
+    // Cancel Btn in item Modal
     cancelItemModal.addEventListener('click', () => {
       addItemModal.classList.add("hide");
     })

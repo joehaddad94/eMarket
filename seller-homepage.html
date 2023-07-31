@@ -111,7 +111,7 @@
     </div>
 
     <!--Add Item MODAL -->
-    <div class="hide">
+    <div id = "addItemModal" class=" hide">
     <div class="add-item-modal">
       <div class="modal-box">
         <div class="modal-header">Add Item</div>
@@ -140,19 +140,15 @@
             <div class="category-dropdown-list">
                 <label for="category">Choose a category:</label>
                 <select name="categories" id="categories">
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
                 </select>
             </div>
             
           
           <div class="buttons">
-            <div class="cancel-button">
+            <div id="cancelBtn" class="cancel-button">
               <button>Cancel</button>
             </div>
-            <div class="create-button">
+            <div id="createItemBtn" class="create-button">
               <button>Create</button>
             </div>
           </div>
@@ -213,8 +209,8 @@
             </ul>
           </div>
         </div>
-        <div class="main-right">
-          <div class="card-container">
+        <div id="productsContainer" class="main-right">
+          <!-- <div class="card-container">
             <div class="card">
               <div class="card-image">
                 <img src="eMarket-frontend/src/images/tomato.jpg" alt="" />
@@ -232,95 +228,8 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="card-container">
-            <div class="card">
-              <div class="card-image">
-                <img src="eMarket-frontend/src/images/orange.jpg" alt="" />
-              </div>
-              <div class="card-title">Test 0</div>
-              <p class="description hide">
-                asdfasdfasdflaskduaskjfhasldfhjasldkjhpxzovicpzkljsherpiolsdkjhlkvcjhsa;oij
-              </p>
-              <div class="card-icons">
-                <div>
-                  <img
-                    src="eMarket-frontend/src/images/add-to-cart.png"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img src="eMarket-frontend/src/images/heart.png" alt="" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-container">
-            <div class="card">
-              <div class="card-image">
-                <img src="eMarket-frontend/src/images/tomato.jpg" alt="" />
-              </div>
-              <div class="card-title">Test1</div>
-              <p class="description hide">
-                asdfasdfasdflaskduaskjfhasldfhjasldkjhpxzovicpzkljsherpiolsdkjhlkvcjhsa;oij
-              </p>
-              <div class="card-icons">
-                <div>
-                  <img
-                    src="eMarket-frontend/src/images/add-to-cart.png"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img src="eMarket-frontend/src/images/heart.png" alt="" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-container">
-            <div class="card">
-              <div class="card-image">
-                <img src="eMarket-frontend/src/images/tomato.jpg" alt="" />
-              </div>
-              <div class="card-title">Test 2</div>
-              <p class="description hide">
-                asdfasdfasdflaskduaskjfhasldfhjasldkjhpxzovicpzkljsherpiolsdkjhlkvcjhsa;oij
-              </p>
-              <div class="card-icons">
-                <div>
-                  <img
-                    src="eMarket-frontend/src/images/add-to-cart.png"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img src="eMarket-frontend/src/images/heart.png" alt="" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-container">
-            <div class="card">
-              <div class="card-image">
-                <img src="eMarket-frontend/src/images/tomato.jpg" alt="" />
-              </div>
-              <div class="card-title">Test 3</div>
-
-              <p class="description hide">
-                asdfasdfasdflaskduaskjfhasldfhjasldkjhpxzovicpzkljsherpiolsdkjhlkvcjhsa;oij
-              </p>
-              <div class="card-icons">
-                <div>
-                  <img
-                    src="eMarket-frontend/src/images/add-to-cart.png"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img src="eMarket-frontend/src/images/heart.png" alt="" />
-                </div>
-              </div>
-            </div>
+          </div> -->
+          
           </div>
         </div>
       </div>

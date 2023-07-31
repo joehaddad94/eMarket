@@ -13,7 +13,7 @@ class ProductsController extends Controller
             $product = Product::find($id);
         }
 
-        $product->$id;
+        // $product->$id;
         $product->name = $request->name ? $request->name : $product->name;
         $product->description = $request->description ? $request->description : $product->description;
         $product->image = $request->image ? $request->image : $product->image;
