@@ -29,7 +29,7 @@ class ProductsController extends Controller
         $product = Product::find($id);
         $product->delete();
 
-        return response()->json(['message' => 'Product deleted successfully']);
+        return response()->json(['message' => 'Success']);
     }
 
     function fetchAllOrOneProduct($id = null) {
