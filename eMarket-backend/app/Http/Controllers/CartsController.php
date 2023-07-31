@@ -28,7 +28,10 @@ class CartsController extends Controller
     }
 
     function fetchAllCartItems($session_id) {
-        $cart = Cart::where('session_id', $session_id)->get();
+        $cart = Cart::where('session_id', $session_id)
+        ->join('products', 'carts.product_id', '=', 'products.id')
+            ->select('carts.*', 'products.name', 'products.image')
+            ->get();
 
         return response()->json(['CartItems' => $cart]);
     }

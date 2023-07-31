@@ -16,13 +16,13 @@ class SessionsController extends Controller
 
         $existingSession = Session::where('user_id', $user_id)->first();
         if ($existingSession) {
-            return response()->json(['message' => 'User already has a session']);
+            return response()->json(['message' => 'User already has a session', 'session_id' => $existingSession->id]);
         }
 
         $session = new Session();
         $session->user_id = $user_id;
         $session->save();
 
-        return response()->json(['message' => 'Session added successfully']);
+        return response()->json(['message' => 'Session added successfully', 'session_id' => $session->id]);
     }
 }

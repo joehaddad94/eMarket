@@ -356,3 +356,7 @@ header img {
 .heart {
   cursor: pointer;
 }
+
+.cancel {
+  cursor: pointer;
+}

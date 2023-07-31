@@ -216,10 +216,31 @@ pages.page_buyer_homepage = () => {
       });
     }
 
-    async function addSession (user_id) {
-      let data = {}
-      let response = await pages.postAPI(`http://127.0.0.1:8000/api/add_session/${id}`, data);
-      console.log(response)
+    async function displayCartItems (session_id) {
+      let dataCart = {};
+      let responseCart = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_cart_items_by_session/${session_id}`, dataCart);
+      console.log(responseCart);
+      
+      const cartItems = responseCart.data.CartItems;
+      console.log(cartItems);
+      const cartWrapper = document.getElementById('cartWrapper');
+      
+      cartItems.forEach((cartItem) => {
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.className = 'cart-item';
+        cartItemDiv.dataset.cartItemId = cartItem.id;
+        cartItemDiv.innerHTML = `<img src="${cartItem.image}" alt="${cartItem.name}" />
+          <div class="details">
+            <h3>${cartItem.name}</h3>
+            <p>Quantity x1</p>
+          </div>
+          <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
+        </div>`;
+      
+        cartWrapper.appendChild(cartItemDiv);
+      });
+
+
     }
 
     function handleCategoryClick(category_id) {
@@ -237,19 +258,56 @@ pages.page_buyer_homepage = () => {
       //add session
       const userId = getUserIdFromLocalStorage();
       console.log(userId);
-      let data = {};
-      let response= await pages.postAPI(`http://127.0.0.1:8000/api/add_session/${userId}`, data);
-      console.log(response);
+      let dataSession = {};
+      let responseSession= await pages.postAPI(`http://127.0.0.1:8000/api/add_session/${userId}`, dataSession);
+      const session_id = responseSession.data.session_id
 
 
       // Load Categories
       loadCategories()
 
+      let dataCart = {};
+let responseCart = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_cart_items_by_session/${session_id}`, dataCart);
+console.log(responseCart);
+
+const cartItems = responseCart.data.CartItems;
+console.log(cartItems);
+const cartWrapper = document.getElementById('cartWrapper');
+
+cartItems.forEach((cartItem) => {
+  const cartItemDiv = document.createElement('div');
+  cartItemDiv.className = 'cart-item';
+  cartItemDiv.dataset.cartItemId = cartItem.id;
+  cartItemDiv.innerHTML = `<img src="${cartItem.image}" alt="${cartItem.name}" />
+    <div class="details">
+      <h3>${cartItem.name}</h3>
+      <p>Quantity x1</p>
+    </div>
+    <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
+  </div>`;
+
+  cartWrapper.appendChild(cartItemDiv);
+
+  const deleteCartItem = cartItemDiv.querySelector('.cancel');
+  deleteCartItem.addEventListener('click', async () => {
+    console.log(deleteCartItem)
+  const cartItemId = cartItemDiv.dataset.cartItemId;
+console.log('Add to cart clicked for product ID:', cartItemId);
+  let data = {}
+  let response = await pages.postAPI(`http://127.0.0.1:8000/api/delete_from_cart/${cartItemId}`, data);
+  console.log(response)
+  cartWrapper.innerHTML = ""
+  displayCartItems(session_id)
+
+})
+});
+
+
       //Display Products
       // displayProducts()
       let dataProducts = {};
       let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
-      console.log(responseDisplayProduct);
+      // console.log(responseDisplayProduct);
     
       const products = responseDisplayProduct.data.Products;
       const productsContainer = document.getElementById('productsContainer');
@@ -281,11 +339,20 @@ pages.page_buyer_homepage = () => {
         productsContainer.appendChild(productCard);
 
         const addToCartIcon = productCard.querySelector('.add-to-cart-icon');
-        console.log(addToCartIcon)
-      addToCartIcon.addEventListener('click', () => {
+        
+      addToCartIcon.addEventListener('click', async () => {
+        
       const productId = productCard.dataset.productId;
       console.log('Add to cart clicked for product ID:', productId);
-
+        let data = {
+          session_id: session_id,
+          product_id: productId
+        }
+        console.log(data)
+        let response = await pages.postAPI('http://127.0.0.1:8000/api/add_to_cart', data);
+        cartWrapper.innerHTML = ""
+        displayCartItems(session_id)
+         
     })
       });
 
