@@ -111,13 +111,104 @@ pages.page_signup = () => {
 
 
 pages.page_buyer_homepage = () => {
-    const cardContainers = document.querySelectorAll(".card-container")
+    
     const cartIcon = document.getElementById('cart')
     const cartModal = document.getElementById('cartmodal')
     const signOutBtn = document.getElementById('signOut')
     const categoriesList = document.getElementById('categoriesList')
+    console.log(categoriesList)
+   
+    // Load Categories
+    async function loadCategories() {
+      let dataCategories = {};
+      let responseCategories = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategories);
     
+      responseCategories.data.Categories.forEach((item) => {
+        const liElement = document.createElement('li');
+        liElement.textContent = item.name;
+        liElement.setAttribute('data-category-id', item.id);
     
+        categoriesList.appendChild(liElement);
+      });
+    }
+
+    // Display Products
+    async function displayProducts() {
+      let dataProducts = {};
+      let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
+      console.log(responseDisplayProduct);
+    
+      const products = responseDisplayProduct.data.Products;
+      const productsContainer = document.getElementById('productsContainer');
+    
+      // productsContainer.innerHTML = '';
+    
+      products.forEach((product) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'card-container';
+        productCard.dataset.productId = product.id;
+        productCard.innerHTML = `
+          <div class="card">
+            <div class="card-image">
+              <img src="${product.image}" alt="${product.name}" />
+            </div>
+            <div class="card-title">${product.name}</div>
+            <p class="description hide">${product.description}</p>
+            <div class="card-icons">
+              <div>
+                <img src="eMarket-frontend/src/images/add-to-cart.png" alt="" />
+              </div>
+              <div>
+                <img src="eMarket-frontend/src/images/heart.png" alt="" />
+              </div>
+            </div>
+          </div>
+        `;
+    
+        productsContainer.appendChild(productCard);
+      });
+
+      
+      
+    }
+
+    async function displayProductsByCategory(id) {
+      // Load Products by Category
+
+      let dataProducts = {};
+      let responseDisplayProduct = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_all_products_by_category/${id}`, dataProducts);
+      // console.log(responseDisplayProduct);
+    
+      const products = responseDisplayProduct.data.Products;
+    
+      const productsContainer = document.getElementById('productsContainer');
+    
+      products.forEach((product) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'card-container';
+        productCard.dataset.productId = product.id;
+        productCard.innerHTML = `
+          <div class="card">
+            <div class="card-image">
+              <img src="${product.image}" alt="${product.name}" />
+            </div>
+            <div class="card-title">${product.name}</div>
+            <p class="description hide">${product.description}</p>
+            <div class="card-buttons">
+              <div>
+                <button id="edit" class="edit-btn">Edit</button>
+              </div>
+              <div>
+                <button id="delete" class="delete-btn">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+    
+        productsContainer.appendChild(productCard);
+      });
+    }
+
     function handleCategoryClick(category_id) {
       return category_id
 
@@ -132,18 +223,31 @@ pages.page_buyer_homepage = () => {
     document.addEventListener('DOMContentLoaded', async () =>{
       
       // Load Categories
-      let dataCategories={}
-      let responseCategories = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategories);
+      loadCategories()
 
-      responseCategories.data.Categories.forEach((item) => {
-      const liElement = document.createElement('li');
-      liElement.textContent = item.name;
-  
-      liElement.setAttribute('data-category-id', item.id);
-      // console.log(item.id)
-  
-      categoriesList.appendChild(liElement);
+      //Display Products
+      displayProducts()
+
+      // Show description on hover
+      
+    productsContainer.querySelectorAll(".card-container").forEach((cardContainer) => {
+      const description = cardContainer.querySelector(".description");
+      console.log(description)
+      
+      cardContainer.addEventListener("mouseenter", () => {
+        console.log("Mouse entered card container");
+        description.classList.remove("hide");
+      });
+    
+      cardContainer.addEventListener("mouseleave", () => {
+        console.log("Mouse left card container");
+        description.classList.add("hide");
+      });
+
     });
+
+    
+
     // Get ID on click
     categoriesList.addEventListener('click', (event) => {
       const clickedElement = event.target;
@@ -151,60 +255,26 @@ pages.page_buyer_homepage = () => {
       if (clickedElement.tagName === 'LI') {
         
         const categoryId = clickedElement.getAttribute('data-category-id');
-        // console.log('Category ID clicked:', categoryId);
+        console.log('Category ID clicked:', categoryId);
   
         handleCategoryClick(categoryId);
+        displayProductsByCategory(categoryId)
       }
+      
     });
-
-    let dataProducts = {}
-      let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
-      console.log(responseDisplayProduct)
-
-  const products = responseDisplayProduct.data.Products;
-
-  const productsContainer = document.getElementById('productsContainer');
-
-  products.forEach((product) => {
-    const productCard = document.createElement('div');
-    productCard.className = 'card-container';
-    productCard.dataset.productId = product.id;
-    productCard.innerHTML = `
-    <div class="card">
-      <div class="card-image">
-        <img src="${product.image}" alt="${product.name}" />
-      </div>
-      <div class="card-title">${product.name}</div>
-      <p class="description hide">${product.description}</p>
-      <div class="card-icons">
-                <div>
-                  <img
-                    src="eMarket-frontend/src/images/add-to-cart.png"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img src="eMarket-frontend/src/images/heart.png" alt="" />
-                </div>
-              </div>
-            </div>
-          </div>
-  `;
-
-    productsContainer.appendChild(productCard);
+ 
   });
 
-    // Show description on hover
-    productsContainer.querySelectorAll(".card-container").forEach((cardContainer) => {
-      const description = cardContainer.querySelector(".description");
-      
-      cardContainer.addEventListener("mouseenter", () => {
-        description.classList.remove("hide");
-      });
+  // Show description on hover
+  productsContainer.querySelectorAll(".card-container").forEach((cardContainer) => {
+    const description = cardContainer.querySelector(".description");
     
-      cardContainer.addEventListener("mouseleave", () => {
-        description.classList.add("hide");
-      });
+    cardContainer.addEventListener("mouseenter", () => {
+      description.classList.remove("hide");
+    });
+  
+    cardContainer.addEventListener("mouseleave", () => {
+      description.classList.add("hide");
     });
   });
 
@@ -223,19 +293,6 @@ pages.page_buyer_homepage = () => {
     })
     
   
-    // Show description on hover
-    cardContainers.forEach((cardContainer) => {
-      const description = cardContainer.querySelector(".description");
-
-      cardContainer.addEventListener("mouseenter", () => {
-        description.classList.remove("hide");
-      });
-  
-      cardContainer.addEventListener("mouseleave", () => {
-        description.classList.add("hide");
-      });
-    });
-
     // Show and hide cart modal
     cartIcon.addEventListener("click", () => {
         cartModal.classList.toggle("hide");
@@ -271,7 +328,93 @@ pages.page_seller_homepage = () => {
     let selectedCategoryId
     
 
+    async function displayProducts() {
+      // Load Products
+
+      let dataProducts = {};
+      let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
+      // console.log(responseDisplayProduct);
     
+      const products = responseDisplayProduct.data.Products;
+    
+      const productsContainer = document.getElementById('productsContainer');
+    
+      products.forEach((product) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'card-container';
+        productCard.dataset.productId = product.id;
+        productCard.innerHTML = `
+          <div class="card">
+            <div class="card-image">
+              <img src="${product.image}" alt="${product.name}" />
+            </div>
+            <div class="card-title">${product.name}</div>
+            <p class="description hide">${product.description}</p>
+            <div class="card-buttons">
+              <div>
+                <button id="edit" class="edit-btn">Edit</button>
+              </div>
+              <div>
+                <button id="delete" class="delete-btn">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+    
+        productsContainer.appendChild(productCard);
+      });
+    }
+
+    async function displayProductsByCategory(id) {
+      // Load Products by Category
+
+      let dataProducts = {};
+      let responseDisplayProduct = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_all_products_by_category/${id}`, dataProducts);
+      // console.log(responseDisplayProduct);
+    
+      const products = responseDisplayProduct.data.Products;
+    
+      const productsContainer = document.getElementById('productsContainer');
+    
+      products.forEach((product) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'card-container';
+        productCard.dataset.productId = product.id;
+        productCard.innerHTML = `
+          <div class="card">
+            <div class="card-image">
+              <img src="${product.image}" alt="${product.name}" />
+            </div>
+            <div class="card-title">${product.name}</div>
+            <p class="description hide">${product.description}</p>
+            <div class="card-buttons">
+              <div>
+                <button id="edit" class="edit-btn">Edit</button>
+              </div>
+              <div>
+                <button id="delete" class="delete-btn">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+    
+        productsContainer.appendChild(productCard);
+      });
+    }
+
+    // Display Categories
+    async function loadCategories() {
+      let dataCategories = {};
+      let responseCategories = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategories);
+      
+      responseCategories.data.Categories.forEach((item) => {
+        const liElement = document.createElement('li');
+        liElement.textContent = item.name;
+        liElement.setAttribute('data-category-id', item.id);
+        categoriesList.appendChild(liElement);
+      });
+    }
+
     function handleCategoryClick(category_id) {
       console.log('Category ID clicked:', category_id);
       return category_id
@@ -286,19 +429,11 @@ pages.page_seller_homepage = () => {
     
     document.addEventListener('DOMContentLoaded', async () =>{
       
+      // Load Products
+      displayProducts();
 
       // Load Categories
-      let dataCategories={}
-      let responseCategories = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategories);
-      
-      responseCategories.data.Categories.forEach((item) => {
-      const liElement = document.createElement('li');
-      liElement.textContent = item.name;
-  
-      liElement.setAttribute('data-category-id', item.id);
-  
-      categoriesList.appendChild(liElement);
-    });
+      loadCategories();
   
     categoriesSelect.addEventListener('change', (event) => {
       selectedCategoryId = event.target.value;
@@ -314,17 +449,22 @@ pages.page_seller_homepage = () => {
   
       if (clickedElement.tagName === 'LI') {
         
-        const categoryId = clickedElement.getAttribute('data-category-id');
-        console.log('Category ID clicked:', categoryId);
+        const categoryIdList = clickedElement.getAttribute('data-category-id');
+        console.log('Category ID clicked:', categoryIdList);
   
-        handleCategoryClick(categoryId);
+        handleCategoryClick(categoryIdList);
+        productsContainer.innerHTML = '';
+      displayProductsByCategory(categoryIdList);
       }
+
+      
+
     });
 
     //load categories in categories modal
       let dataCategoriesModal={}
       let responseCategoriesModal = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategoriesModal);
-      console.log(responseCategoriesModal)
+      // console.log(responseCategoriesModal)
 
       responseCategoriesModal.data.Categories.forEach((item) => {
         const optionElement = document.createElement('option');
@@ -334,43 +474,10 @@ pages.page_seller_homepage = () => {
         categoriesSelect.appendChild(optionElement);
       });
 
-      // Load Products
-      let dataProducts = {}
-      let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
-      console.log(responseDisplayProduct)
-
-  const products = responseDisplayProduct.data.Products;
-
-  const productsContainer = document.getElementById('productsContainer');
-
-  products.forEach((product) => {
-    const productCard = document.createElement('div');
-    productCard.className = 'card-container';
-    productCard.dataset.productId = product.id;
-    productCard.innerHTML = `
-      <div class="card">
-        <div class="card-image">
-          <img src="${product.image}" alt="${product.name}" />
-        </div>
-        <div class="card-title">${product.name}</div>
-        <p class="description hide">${product.description}</p>
-        <div class="card-buttons">
-          <div>
-            <button id="edit" class="edit-btn">Edit</button>
-          </div>
-          <div>
-            <button id="delete" class="delete-btn">Delete</button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    productsContainer.appendChild(productCard);
-
     // Show description on hover
     productsContainer.querySelectorAll(".card-container").forEach((cardContainer) => {
       const description = cardContainer.querySelector(".description");
-      console.log(description);
+      // console.log(description);
       cardContainer.addEventListener("mouseenter", () => {
         description.classList.remove("hide");
       });
@@ -386,28 +493,27 @@ pages.page_seller_homepage = () => {
     // Edit Product
     editButton.addEventListener('click', () => {
       const productId = productCard.dataset.productId;
-      console.log('Edit button clicked for product ID:', productId);
-      // Handle edit action here using the productId
+      // console.log('Edit button clicked for product ID:', productId);
     });
 
     // Delete Product
     deleteButton.addEventListener('click', async () => {
       const productId = productCard.dataset.productId;
       console.log('Delete button clicked for product ID:', productId);
-      console.log(token)
       let data = {}
-      let responseDeleteProduct = await axios.post('http://127.0.0.1:8000/api/delete_product/${productId}', data, {
+      let responseDeleteProduct = await axios.post(`http://127.0.0.1:8000/api/delete_product/${productId}`, data, {
         headers: {
           'Authorization': `Bearer ${token}`, 
         },
       });
       console.log(responseDeleteProduct)
+      if(responseDeleteProduct.data.message== "Product deleted successfully"){
+
+      }
+
     });
   });
-  });
-
-
-   
+  
     // Open Add product Modal
     addItemBtn.addEventListener('click', async () => {
       addItemModal.classList.remove("hide");
@@ -443,28 +549,23 @@ pages.page_seller_homepage = () => {
           description: description,
           image: base64Image
         };
-    //     const dataProduct = new FormData();
-
-    // // Append the properties to the FormData object
-    // dataProduct.append('category_id', category_id);
-    // dataProduct.append('name', productName);
-    // dataProduct.append('description', description);
-    // dataProduct.append('image', base64Image);
-    console.log(dataProduct)
-        console.log(token)
+    
     try {
       const responseAddProduct = await axios.post('http://127.0.0.1:8000/api/add_update_product', dataProduct, {
         headers: {
           'Authorization': `Bearer ${token}`, 
         },
       });
+
+      
+      addItemModal.classList.add("hide");
+      productsContainer.innerHTML = '';
+      displayProducts();
     
-      console.log(responseAddProduct);
     } catch (error) {
       console.error('Error adding product:', error);
     }
-        
-       
+             
       };
     
       reader.readAsDataURL(file);
@@ -504,18 +605,16 @@ pages.page_seller_homepage = () => {
       }
       
       let response = await pages.postAPI('http://127.0.0.1:8000/api/add_update_category', data);
-      console.log(response)
+      
       categoryModal.classList.add("hide");
-      location.reload()
+      liElement.innerHTML = ""
+      loadCategories()
+      
     })
   
      // Hide add category modal
      cancelCategoryModal.addEventListener("click", () => { 
       categoryModal.classList.add("hide");
     });
-
-    
-
-     
 
   };

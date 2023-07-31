@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
@@ -38,6 +39,16 @@ class ProductsController extends Controller
             $products = Product::all();
         }
         
+        return json_encode(["Products" => $products]);
+    }
+
+    function fetchProductsByCategory ($category_id) {
+        $products = DB::table('products')
+        ->join('categories', 'products.category_id', '=', 'categories.id')
+        ->where('categories.id', $category_id)
+        ->select('products.*')
+        ->get();
+
         return json_encode(["Products" => $products]);
     }
 }

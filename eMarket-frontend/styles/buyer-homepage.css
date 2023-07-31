@@ -344,3 +344,7 @@ header img {
   text-align: right;
   padding: 5%;
 }
+
+.categories-list li {
+  cursor: pointer;
+}
