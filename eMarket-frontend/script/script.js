@@ -67,21 +67,23 @@ pages.page_signup = () => {
     const fullNameInput = document.getElementById('full-name');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
-    const userType = document.getElementById('signup_select').value;
+    const userTypeDropdown = document.getElementById('signup_select');
     const signUpBtn = document.getElementById('signup');
    
     // Sign Up
     signUpBtn.addEventListener('click', async (event)=>{
       event.preventDefault();
-      console.log('clicked')
+      
       try {
           // find type_id
+      let userType = userTypeDropdown.value
       let userTypeID;
       if (userType === "Seller") {
           userTypeID = 1;
       } else if (userType === "Buyer") {
         userTypeID = 2;
       } 
+      console.log(userType)
       
         const fullName = fullNameInput.value
         const email = emailInput.value
@@ -113,10 +115,57 @@ pages.page_buyer_homepage = () => {
     const cartIcon = document.getElementById('cart')
     const cartModal = document.getElementById('cartmodal')
     const signOutBtn = document.getElementById('signOut')
+    const categoriesList = document.getElementById('categoriesList')
     
+    
+    function handleCategoryClick(category_id) {
+      return category_id
+
+    }
+
+    // Get Token
+    const UserAuth = localStorage.getItem('userAuth');
+    const data = JSON.parse(UserAuth);
+    const token = data.token;
+    
+    
+    document.addEventListener('DOMContentLoaded', async () =>{
+      
+      // Load Categories
+      let dataCategories={}
+      let responseCategories = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategories);
+
+      responseCategories.data.Categories.forEach((item) => {
+      const liElement = document.createElement('li');
+      liElement.textContent = item.name;
+  
+      liElement.setAttribute('data-category-id', item.id);
+      console.log(item.id)
+  
+      categoriesList.appendChild(liElement);
+    });
+  
+    categoriesList.addEventListener('click', (event) => {
+      const clickedElement = event.target;
+  
+      if (clickedElement.tagName === 'LI') {
+        
+        const categoryId = clickedElement.getAttribute('data-category-id');
+        console.log('Category ID clicked:', categoryId);
+  
+        handleCategoryClick(categoryId);
+      }
+    });
+  })
 
     // Sign Out
-    signOutBtn.addEventListener('click', ()=>{
+    signOutBtn.addEventListener('click', async ()=>{
+      let data = {};
+      const response = await axios.post('http://127.0.0.1:8000/api/logout', data, {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+        },})
+        console.log(response)
       localStorage.removeItem("userInfo");
       localStorage.removeItem("userAuth");
       window.location.href = "index.html";
@@ -177,8 +226,16 @@ pages.page_seller_homepage = () => {
       return category_id
 
     }
+
+    // Get Token
+    const UserAuth = localStorage.getItem('userAuth');
+    const data = JSON.parse(UserAuth);
+    const token = data.token;
+    
     
     document.addEventListener('DOMContentLoaded', async () =>{
+      
+
       // Load Categories
       let dataCategories={}
       let responseCategories = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_categories', dataCategories);
@@ -231,13 +288,10 @@ pages.page_seller_homepage = () => {
       let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
       console.log(responseDisplayProduct)
 
-      // Assuming the products are returned in the response's data.Products array
   const products = responseDisplayProduct.data.Products;
 
-  // Get the container where the products will be displayed
   const productsContainer = document.getElementById('productsContainer');
 
-  // Loop through the products and create HTML elements for each product
   products.forEach((product) => {
     const productCard = document.createElement('div');
     productCard.className = 'card-container';
@@ -262,6 +316,19 @@ pages.page_seller_homepage = () => {
 
     productsContainer.appendChild(productCard);
 
+    // Show description on hover
+    productsContainer.querySelectorAll(".card-container").forEach((cardContainer) => {
+      const description = cardContainer.querySelector(".description");
+      console.log(description);
+      cardContainer.addEventListener("mouseenter", () => {
+        description.classList.remove("hide");
+      });
+    
+      cardContainer.addEventListener("mouseleave", () => {
+        description.classList.add("hide");
+      });
+    });
+
       const editButton = productCard.querySelector('.edit-btn');
       const deleteButton = productCard.querySelector('.delete-btn');
 
@@ -276,8 +343,13 @@ pages.page_seller_homepage = () => {
     deleteButton.addEventListener('click', async () => {
       const productId = productCard.dataset.productId;
       console.log('Delete button clicked for product ID:', productId);
-      
-      let responseDeleteProduct = await pages.getAPI('http://127.0.0.1:8000/api/delete_product/${productId}');
+      console.log(token)
+      let data = {}
+      let responseDeleteProduct = await axios.post('http://127.0.0.1:8000/api/delete_product/${productId}', data, {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+        },
+      });
       console.log(responseDeleteProduct)
     });
   });
@@ -290,7 +362,7 @@ pages.page_seller_homepage = () => {
       addItemModal.classList.remove("hide");
     })
 
-    // add a product
+    // Add a product
     createItemBtn.addEventListener('click', async (event) => {
       event.preventDefault()
 
@@ -328,9 +400,19 @@ pages.page_seller_homepage = () => {
     // dataProduct.append('description', description);
     // dataProduct.append('image', base64Image);
     console.log(dataProduct)
-          
-        let responseAddProduct = await pages.postAPI('http://127.0.0.1:8000/api/add_update_product', dataProduct);
-          console.log(responseAddProduct);
+        console.log(token)
+    try {
+      const responseAddProduct = await axios.post('http://127.0.0.1:8000/api/add_update_product', dataProduct, {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+        },
+      });
+    
+      console.log(responseAddProduct);
+    } catch (error) {
+      console.error('Error adding product:', error);
+    }
+        
        
       };
     
@@ -343,7 +425,13 @@ pages.page_seller_homepage = () => {
     })
 
     // Sign Out
-    signOutBtn.addEventListener('click', ()=>{
+    signOutBtn.addEventListener('click', async ()=>{
+      let data = {};
+      const response = await axios.post('http://127.0.0.1:8000/api/logout', data, {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+        },})
+        console.log(response)
       localStorage.removeItem("userInfo");
       localStorage.removeItem("userAuth");
       window.location.href = "index.html";
@@ -375,18 +463,7 @@ pages.page_seller_homepage = () => {
       categoryModal.classList.add("hide");
     });
 
-    // Show description on hover
-    cardContainers.forEach((cardContainer) => {
-      const description = cardContainer.querySelector(".description");
-
-      cardContainer.addEventListener("mouseenter", () => {
-        description.classList.remove("hide");
-      });
-  
-      cardContainer.addEventListener("mouseleave", () => {
-        description.classList.add("hide");
-      });
-    });
+    
 
      
 

@@ -74,6 +74,10 @@
   text-decoration: none;
 }
 
+.description {
+  text-align: center;
+}
+
 .add-item-btn {
   -webkit-border-radius: 10;
   -moz-border-radius: 10;

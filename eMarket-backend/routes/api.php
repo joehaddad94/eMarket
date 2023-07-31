@@ -21,5 +21,5 @@ Route::post('/fetch_one_or_all_categories/{id?}', [CategoriesController::class, 
 
 
 Route::post('/add_update_product/{id?}', [ProductsController::class, "createOrUpdateProduct"]);
-Route::get('/delete_product/{id?}', [ProductsController::class, "deleteProduct"]);
+Route::post('/delete_product/{id?}', [ProductsController::class, "deleteProduct"]);
 Route::post('/fetch_one_or_all_products/{id?}', [ProductsController::class, "fetchAllOrOneProduct"]);
