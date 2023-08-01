@@ -349,6 +349,9 @@ header img {
   cursor: pointer;
 }
 
-.add-to-cart-icon .heart .cancel .add-to-cart {
+.add-to-cart-icon,
+.heart,
+.cancel,
+.add-to-cart {
   cursor: pointer;
 }

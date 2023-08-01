@@ -95,7 +95,7 @@ pages.page_signup = () => {
           password: password,
           type_id: userTypeID  
         }
-        
+        console.log(data)
         let response = await pages.postAPI('http://127.0.0.1:8000/api/register', data);
         console.log(response)
         
@@ -166,7 +166,7 @@ pages.page_buyer_homepage = () => {
                 <img src="eMarket-frontend/src/images/add-to-cart.png" alt="" />
               </div>
               <div>
-                <img src="eMarket-frontend/src/images/heart.png" alt="" />
+                <img id="hearts" class="heart" src="eMarket-frontend/src/images/heart.png" alt="" />
               </div>
             </div>
           </div>
@@ -206,7 +206,7 @@ pages.page_buyer_homepage = () => {
               <img src="eMarket-frontend/src/images/add-to-cart.png" alt="" />
             </div>
             <div>
-              <img src="eMarket-frontend/src/images/heart.png" alt="" />
+              <img id="hearts" class="heart" src="eMarket-frontend/src/images/heart.png" alt="" />
             </div>
           </div>
         </div>
@@ -221,7 +221,7 @@ pages.page_buyer_homepage = () => {
 
       let dataProducts = {};
       let responseDisplayProduct = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_favourites_by_session/${session_id}`, dataProducts);
-      // console.log(responseDisplayProduct);
+    
     
       const products = responseDisplayProduct.data.Products;
     
@@ -243,7 +243,7 @@ pages.page_buyer_homepage = () => {
               <img src="eMarket-frontend/src/images/add-to-cart.png" alt="" />
             </div>
             <div>
-              <img src="eMarket-frontend/src/images/heart.png" alt="" />
+              <img id="hearts" class="heart" src="eMarket-frontend/src/images/heart.png" alt="" />
             </div>
           </div>
         </div>
@@ -304,52 +304,64 @@ pages.page_buyer_homepage = () => {
       loadCategories()
 
       let dataCart = {};
-let responseCart = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_cart_items_by_session/${session_id}`, dataCart);
-console.log(responseCart);
+      let responseCart = await pages.postAPI(`http://127.0.0.1:8000/api/fetch_cart_items_by_session/${session_id}`, dataCart);
+    
 
-const cartItems = responseCart.data.CartItems;
-console.log(cartItems);
-const cartWrapper = document.getElementById('cartWrapper');
+      const cartItems = responseCart.data.CartItems;
+      console.log(cartItems);
+      const cartWrapper = document.getElementById('cartWrapper');
 
-cartItems.forEach((cartItem) => {
-  const cartItemDiv = document.createElement('div');
-  cartItemDiv.className = 'cart-item';
-  cartItemDiv.dataset.cartItemId = cartItem.id;
-  cartItemDiv.innerHTML = `<img src="${cartItem.image}" alt="${cartItem.name}" />
-    <div class="details">
+      cartItems.forEach((cartItem) => {
+      const cartItemDiv = document.createElement('div');
+      cartItemDiv.className = 'cart-item';
+      cartItemDiv.dataset.cartItemId = cartItem.id;
+      cartItemDiv.innerHTML = `<img src="${cartItem.image}" alt="${cartItem.name}" />
+      <div class="details">
       <h3>${cartItem.name}</h3>
       <p>Quantity x1</p>
-    </div>
-    <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
-  </div>`;
+      </div>
+      <div class="cancel"><i class="fa-solid fa-xmark"></i></div>
+      </div>`;
 
-  cartWrapper.appendChild(cartItemDiv);
+      cartWrapper.appendChild(cartItemDiv);
 
-  const deleteCartItem = cartItemDiv.querySelector('.cancel');
-  deleteCartItem.addEventListener('click', async () => {
-    console.log(deleteCartItem)
-  const cartItemId = cartItemDiv.dataset.cartItemId;
-console.log('Add to cart clicked for product ID:', cartItemId);
-  let data = {}
-  let response = await pages.postAPI(`http://127.0.0.1:8000/api/delete_from_cart/${cartItemId}`, data);
-  console.log(response)
-  cartWrapper.innerHTML = ""
-  displayCartItems(session_id)
+      const deleteCartItem = cartItemDiv.querySelector('.cancel');
+      deleteCartItem.addEventListener('click', async () => {
+      
+      const cartItemId = cartItemDiv.dataset.cartItemId;
+      console.log('Add to cart clicked for product ID:', cartItemId);
+      let data = {}
+      let response = await pages.postAPI(`http://127.0.0.1:8000/api/delete_from_cart/${cartItemId}`, data);
+      
+      cartWrapper.innerHTML = ""
+      displayCartItems(session_id)
 
-})
-});
+
+      document.getElementById('productsContainer').addEventListener('click', async (event) => {
+      const clickedElement = event.target;
+      if (clickedElement.classList.contains('heart')) {
+        console.log('clicked');
+        let data = {
+          session_id: session_id,
+          product_id: clickedElement.dataset.productId
+        };
+        const response = await postAPI('http://127.0.0.1:8000/api/add_to_favourites', data);
+        console.log(response);
+      }
+      });
+
+    })
+
+    });
 
 
       //Display Products
-      // displayProducts()
       let dataProducts = {};
       let responseDisplayProduct = await pages.postAPI('http://127.0.0.1:8000/api/fetch_one_or_all_products', dataProducts);
-      // console.log(responseDisplayProduct);
     
       const products = responseDisplayProduct.data.Products;
       const productsContainer = document.getElementById('productsContainer');
     
-      // productsContainer.innerHTML = '';
     
       products.forEach((product) => {
         const productCard = document.createElement('div');
@@ -390,7 +402,6 @@ console.log('Add to cart clicked for product ID:', cartItemId);
         cartWrapper.innerHTML = ""
         displayCartItems(session_id)
         })
-
         
       });
 
@@ -469,10 +480,8 @@ console.log('Add to cart clicked for product ID:', cartItemId);
       });
 
       const allProducts = document.getElementById("all")
-      const favourites = document.getElementById("Favourites")
-      const heart = document.getElementById('hearts')
-      console.log(hearts)
-
+      const favourites = document.getElementById("favourites")
+      
 
       allProducts.addEventListener('click', () => {
         productsContainer.innerHTML = ""
@@ -484,15 +493,8 @@ console.log('Add to cart clicked for product ID:', cartItemId);
         console.log(response)
       })
       
-      heart.addEventListener('click', async () => {
-        console.log('clicked')
-        // let data = {
-        //   session_id: session_id,
-        //   product_id: productId
-        // }
-        // const response = await postAPI('http://127.0.0.1:8000/api/add_to_favourites', data);
-        // console.log(response)
-      })
+      
+      
 
   };
 
@@ -712,10 +714,26 @@ pages.page_seller_homepage = () => {
   
       handleCategoryClick(selectedCategoryId);
 
+      // Create Category
+    createCategoryBtn.addEventListener('click', async (event) =>{
+      event.preventDefault();
+      
+      categoryName = addCategoryInput.value
+
+      let data = {
+        name: categoryName
+      }
+      
+      let response = await pages.postAPI('http://127.0.0.1:8000/api/add_update_category', data);
+      
+      categoryModal.classList.add("hide");
+      categoriesList.innerHTML = ""
+      // loadCategories()
+      loadCategories()
+      
+    })
       
     });
-
-    
 
     categoriesList.addEventListener('click', (event) => {
       const clickedElement = event.target;
@@ -857,6 +875,7 @@ pages.page_seller_homepage = () => {
       
       categoryModal.classList.add("hide");
       liElement.innerHTML = ""
+      // loadCategories()
       loadCategories()
       
     })
@@ -867,9 +886,10 @@ pages.page_seller_homepage = () => {
     });
 
     const allProducts = document.getElementById("all")
-
-    allProducts.addEventListener('click', () => {
+      
+      allProducts.addEventListener('click', () => {
       productsContainer.innerHTML = ""
+      
       displayProducts()
     })
   };
